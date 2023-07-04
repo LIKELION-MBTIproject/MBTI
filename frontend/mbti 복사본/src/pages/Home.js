@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import './Home.css';
 import {useNavigate} from 'react-router-dom';
-
+import axios from 'axios';
 
 function Home(){ 
     const navigate = useNavigate();
-    const [userMbti,setUserMbti] = useState(['','','','']);
-    //const userMbtiList = userMbti.map((user)=>(<Result user={user}/>))
+    const [userMbti,setUserMbti] = useState(['']);
+
     const [mbti]= useState([
       ['E','I'],
       ['S','N'],
@@ -14,6 +14,18 @@ function Home(){
       ['J','P']
     ]);
     const [mean] = useState(['에너지 방향','인식 방식','판단', '생활 양식']);
+    const [userDetail, setDetail] = useState('');
+
+    const getDetail =()=>{
+        axios.get(`http://localhost:8080/mbti/${userMbti[0]}${userMbti[1]}${userMbti[2]}${userMbti[3]}`)
+          .then(res=>{
+            setDetail(res.userMbti.info);
+          }) 
+          .catch(e=>{
+            alert("실패");
+          })      
+    }
+
     return (
       <div className="Home">
         <div className="upperTitle">
@@ -24,14 +36,14 @@ function Home(){
         <div className="chooseMbti">
           {mbti.map((a,i)=>{
               return(
-                <div>
+                <div key={i}>
                  <input id={`one${i}`} name={i} type="radio" value={a[0]}
                  onClick={(e)=>{
                   let copy = [...userMbti];
                   copy[i] =  e.target.value;
                   setUserMbti(copy);
                  }}/> 
-                  <label for={`one${i}`}>{a[0]}</label>
+                  <label htmlFor={`one${i}`}>{a[0]}</label>
 
                   <p className='mean'>{mean[i]}</p>
                   <input id={`two${i}`} name={i} type="radio" value={a[1]}
@@ -40,7 +52,7 @@ function Home(){
                     copy2[i] =  e.target.value;
                     setUserMbti(copy2);
                    }}/> 
-                  <label for={`two${i}`}>{a[1]}</label>
+                  <label htmlFor={`two${i}`}>{a[1]}</label>
               </div>
               )
             })}
@@ -48,7 +60,9 @@ function Home(){
         </div>
 
         <div className="completeBtn">
-              <input type='submit' value={"확인"} onClick={()=>{navigate('/result',{state:{value:userMbti}});}}/>
+              <input type='submit' value={"확인"} onClick={()=>{
+                getDetail();
+                navigate('/result',{state:{mbti:userMbti, detail:userDetail}});}}/>
            </div>
 
         <div className="lowerTitle"></div>
