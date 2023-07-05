@@ -16,7 +16,8 @@ function Admin(){
     const [addDetail, setAddDetail] = useState(['']);
 
     const updateMbti = () =>{
-      axios.post(`http://localhost:8080/mbti/${userMbti[0]}${userMbti[1]}${userMbti[2]}${userMbti[3]}`,{
+      axios.post('http://49.247.33.67:8080/mbti/',{
+         mbti: `${userMbti[0]}${userMbti[1]}${userMbti[2]}${userMbti[3]}`,
          info: addDetail
       })
          .then(res=>{
