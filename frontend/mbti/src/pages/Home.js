@@ -18,7 +18,7 @@ function Home(){
 
     
       useEffect(() => {
-        axios.get(`http://49.247.33.67:8080/mbti/${userMbti[0]}${userMbti[1]}${userMbti[2]}${userMbti[3]}`)
+        axios.get(`http://localhost:8080/mbti/${userMbti[0]}${userMbti[1]}${userMbti[2]}${userMbti[3]}`)
         .then(res=>{
           setDetail(res.data.info);
           console.log(userDetail);
